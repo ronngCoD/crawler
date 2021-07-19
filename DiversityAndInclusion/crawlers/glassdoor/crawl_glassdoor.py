@@ -72,4 +72,4 @@ def crawl_company(sCompanyName,sCompanyCode,numPages=100):
             f.flush()
 
 if __name__ == "__main__":
-    crawl_company('Cisco-Systems','E1425',numPages=1400)
+    crawl_company('Microsoft','E1651',numPages=2800)
