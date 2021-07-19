@@ -72,5 +72,5 @@ def crawl_company(sCompanyName, numPages=100):
 
 
 if __name__ == "__main__":
-    crawl_company('Microsoft', numPages=328)
+    crawl_company('Berkshire-Hathaway', numPages=9)
 
