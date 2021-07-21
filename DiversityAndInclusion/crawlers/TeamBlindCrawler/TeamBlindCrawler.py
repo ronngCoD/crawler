@@ -4,14 +4,13 @@ from tqdm import tqdm
 import json
 from selenium import webdriver
 from bs4 import BeautifulSoup
-import requests
 import lxml
 import cchardet
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(r"C:\Users\pc-179\PycharmProjects\chromedriver")
 
 
 def crawl_company(sCompanyName, numPages=100):
@@ -29,12 +28,8 @@ def crawl_company(sCompanyName, numPages=100):
 
         for i in tqdm(range(2, numPages + 2)):
             time.sleep(random.randint(3, 15))
-            headers = {"User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, l"
-                                     "ike Gecko) Chrome/91.0.4472.114 Safari/537.36"}
-            requests_session = requests.Session()
-            r = requests_session.get(sUrl, headers=headers)
-            soup = BeautifulSoup(r.content, 'lxml', )
-            reviews = soup.find_all('div', attrs={'class': "review_item"})
+            soup = BeautifulSoup(driver.page_source, 'lxml', )
+            reviews = soup.find_all('div', attrs={'class': "review_item_inr"})
             for review in reviews:
                 rating = -1
                 ratingHTML = review.find('i', attrs={'class': "blind"}).next_sibling
@@ -46,10 +41,13 @@ def crawl_company(sCompanyName, numPages=100):
                     desc = descHTML.text
                 pros = ''
                 cons = ''
+                resignation = ''
                 proconsHTML = review.find_all('strong', attrs={'class': "abt"})
                 if proconsHTML:
                     pros = proconsHTML[0].next_sibling.text
                     cons = proconsHTML[1].next_sibling.text
+                    if len(proconsHTML) > 2:
+                        resignation = proconsHTML[2].next_sibling.text
                 authorInfo = ''
                 authorInfoHTML = review.find('div', attrs={'class': 'auth'})
                 if authorInfoHTML is not None:
@@ -59,13 +57,26 @@ def crawl_company(sCompanyName, numPages=100):
                     'desc': desc,
                     'pros': pros,
                     'cons': cons,
+                    'resignation reason': resignation,
                     'authorInfo': authorInfo
                 }
                 f.write(json.dumps(reviewDict) + '\n')
             sUrl = "https://www.teamblind.com/company/" +sCompanyName+ "/reviews?page=" + str(i)
             driver.get(sUrl)
             f.flush()
+    with open('data/' + sCompanyName + '.txt', 'r', encoding='utf-8') as f:
+        data = f.read()
+
+    data = data.replace("\\", "")
+    data = data.replace("u201c", "")
+    data = data.replace("u201d", "")
+    data = data.replace("n                   ", "")
+    data = data.replace("n            ", "")
+    data = data.replace("u00b7", "")
+
+    with open('data/' + sCompanyName + '.txt', 'w', encoding='utf-8') as f:
+        f.write(data)
 
 
 if __name__ == "__main__":
-    crawl_company('Amazon', numPages=5)
+    crawl_company('Amazon', numPages=237)
