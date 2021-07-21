@@ -8,7 +8,7 @@ import requests
 import lxml
 import cchardet
 
-driver = webdriver.Chrome()
+driver = webdriver.Chrome(r"C:\Users\pc-179\PycharmProjects\chromedriver")
 
 
 def crawl_company(sCompanyName, numPages=100):
@@ -72,5 +72,4 @@ def crawl_company(sCompanyName, numPages=100):
 
 
 if __name__ == "__main__":
-    crawl_company('Berkshire-Hathaway', numPages=9)
-
+    crawl_company('Amazon.com', numPages=3399)
