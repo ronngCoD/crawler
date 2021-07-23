@@ -26,7 +26,7 @@ def crawl_company(sCompanyName,sCompanyCode,numPages=100):
         pas.send_keys("uVXph_KB38_hvvd")
         pas.submit()
         for i in tqdm(range(2,numPages+2)):
-            time.sleep(random.randint(3,20))
+            time.sleep(random.randint(1,8))
             soup=BeautifulSoup(driver.page_source, 'html.parser')
             reviews=soup.find_all('li', attrs= {'class':"noBorder empReview cf pb-0 mb-0"})
             for review in reviews:
@@ -34,6 +34,10 @@ def crawl_company(sCompanyName,sCompanyCode,numPages=100):
                 ratingHTML=review.find('span',attrs={'class':"ratingNumber mr-xsm"})
                 if ratingHTML is not None:
                     rating=ratingHTML.text
+                employeeStatus=''
+                employeeStatusHTML=review.find('span',attrs={'class':"pt-xsm pt-md-0 css-1qxtz39 eg4psks0"})
+                if ratingHTML is not None:
+                    employeeStatus=employeeStatusHTML.text
                 pros=''
                 prosHTML = review.find('span', attrs={'data-test': "pros"})
                 if prosHTML is not None:
@@ -56,6 +60,7 @@ def crawl_company(sCompanyName,sCompanyCode,numPages=100):
                     authorLocation = authorLocationHTML.text
                 reviewDict={
                     'rating':rating,
+                    'employeeStatus':employeeStatus,
                     'pros':pros,
                     'cons':cons,
                     'adviceManagement': adviceManagement,
@@ -72,4 +77,4 @@ def crawl_company(sCompanyName,sCompanyCode,numPages=100):
             f.flush()
 
 if __name__ == "__main__":
-    crawl_company('Microsoft','E1651',numPages=2800)
+    crawl_company('Amazon','E6036',numPages=7547)
