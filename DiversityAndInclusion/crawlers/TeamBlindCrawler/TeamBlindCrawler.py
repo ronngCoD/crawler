@@ -50,6 +50,7 @@ def crawl_company(sCompanyName, numPages=100):
                     cons = cons.replace('"', "")
                     if len(proconsHTML) > 2:
                         resignation = proconsHTML[2].next_sibling.text
+                        resignation = resignation.replace('"', "")
                 authorInfo = ''
                 authorInfoHTML = review.find('div', attrs={'class': 'auth'})
                 if authorInfoHTML is not None:
@@ -81,4 +82,4 @@ def crawl_company(sCompanyName, numPages=100):
 
 
 if __name__ == "__main__":
-    crawl_company('Amazon', numPages=237)
+    crawl_company('microsoft', numPages=97)
