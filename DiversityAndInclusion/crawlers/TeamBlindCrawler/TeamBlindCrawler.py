@@ -45,7 +45,9 @@ def crawl_company(sCompanyName, numPages=100):
                 proconsHTML = review.find_all('strong', attrs={'class': "abt"})
                 if proconsHTML:
                     pros = proconsHTML[0].next_sibling.text
+                    pros = pros.replace('"', "")
                     cons = proconsHTML[1].next_sibling.text
+                    cons = cons.replace('"', "")
                     if len(proconsHTML) > 2:
                         resignation = proconsHTML[2].next_sibling.text
                 authorInfo = ''
