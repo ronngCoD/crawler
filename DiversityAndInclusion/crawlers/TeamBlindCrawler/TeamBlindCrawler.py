@@ -82,4 +82,4 @@ def crawl_company(sCompanyName, numPages=100):
 
 
 if __name__ == "__main__":
-    crawl_company('microsoft', numPages=97)
+    crawl_company('Amazon', numPages=245)
